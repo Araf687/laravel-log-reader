@@ -433,6 +433,7 @@ export default function Page() {
   const [toDate, setToDate] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rawInput, setRawInput] = useState("");
+  const [isRawInputOpen, setIsRawInputOpen] = useState(false);
   const [humanizedRows, setHumanizedRows] = useState<Record<string, boolean>>({});
   const [isDark, setIsDark] = useState(() => {
     if (typeof window === "undefined") {
@@ -598,11 +599,11 @@ export default function Page() {
         className={`pointer-events-none absolute inset-0 bg-[size:72px_72px] transition-opacity ${ui.grid}`}
       />
 
-      <div className="relative flex w-full flex-col gap-4 px-1.5 py-4 sm:px-2 lg:px-3 lg:py-5">
+      <div className="relative grid w-full gap-4 px-1.5 py-4 sm:px-2 lg:px-3 lg:py-5 xl:grid-cols-2 xl:items-stretch">
         <section
           className={`rounded-[1.5rem] border px-4 py-4 shadow-2xl backdrop-blur transition-colors md:px-5 ${ui.hero}`}
         >
-          <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+          <div className="flex flex-col gap-4 xl:flex-col xl:items-end xl:justify-between">
             <div className="max-w-4xl">
               <div className="mb-3 flex flex-wrap items-center gap-2">
                 <span className="rounded-full border border-amber-300/30 bg-amber-300/12 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.2em] text-amber-100">
@@ -616,26 +617,26 @@ export default function Page() {
               <h1 className={`font-[family-name:var(--font-display)] text-3xl leading-tight tracking-tight sm:text-4xl ${ui.title}`}>
                 Review logs in a workspace that prioritizes scanning, not decoration.
               </h1>
-              <p className={`mt-2 max-w-3xl text-sm leading-6 sm:text-base ${ui.text}`}>
+              {/* <p className={`mt-2 max-w-3xl text-sm leading-6 sm:text-base ${ui.text}`}>
                 Upload or paste Laravel logs, keep stack traces intact, filter by level,
                 and inspect results in a denser full-width table.
-              </p>
+              </p> */}
             </div>
 
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 xl:min-w-[42rem]">
-              <div className={`rounded-xl border px-3 py-3 ${ui.card}`}>
+            <div className="flex w-full flex-row gap-2">
+              <div className={`min-w-0 flex-1 rounded-xl border px-3 py-3 ${ui.card}`}>
                 <p className={`text-[11px] uppercase tracking-[0.18em] ${ui.dim}`}>Entries</p>
                 <p className={`mt-1 text-2xl font-semibold ${ui.title}`}>{stats.total}</p>
               </div>
-              <div className={`rounded-xl border px-3 py-3 ${ui.card}`}>
+              <div className={`min-w-0 flex-1 rounded-xl border px-3 py-3 ${ui.card}`}>
                 <p className={`text-[11px] uppercase tracking-[0.18em] ${ui.dim}`}>Visible</p>
                 <p className={`mt-1 text-2xl font-semibold ${ui.title}`}>{stats.visible}</p>
               </div>
-              <div className={`rounded-xl border px-3 py-3 ${ui.card}`}>
+              <div className={`min-w-0 flex-1 rounded-xl border px-3 py-3 ${ui.card}`}>
                 <p className={`text-[11px] uppercase tracking-[0.18em] ${ui.dim}`}>Errors</p>
                 <p className={`mt-1 text-2xl font-semibold ${ui.title}`}>{stats.errors}</p>
               </div>
-              <div className={`rounded-xl border px-3 py-3 ${ui.card}`}>
+              <div className={`min-w-0 flex-1 rounded-xl border px-3 py-3 ${ui.card}`}>
                 <p className={`text-[11px] uppercase tracking-[0.18em] ${ui.dim}`}>Environments</p>
                 <p className={`mt-1 text-2xl font-semibold ${ui.title}`}>{stats.environments}</p>
               </div>
@@ -643,7 +644,7 @@ export default function Page() {
           </div>
         </section>
 
-        <section className="grid gap-4 xl:grid-cols-[320px_minmax(0,1fr)]">
+        <section className="contents">
           <div className={`rounded-[1.5rem] border p-4 shadow-2xl backdrop-blur transition-colors ${ui.side}`}>
             <div className="flex items-center justify-between gap-3">
               <div>
@@ -681,7 +682,13 @@ export default function Page() {
             </label>
 
             <div className="mt-4 flex items-center justify-between gap-3">
-              <p className={`text-[11px] uppercase tracking-[0.18em] ${ui.dim}`}>Raw input</p>
+              <button
+                type="button"
+                onClick={() => setIsRawInputOpen(true)}
+                className={`rounded-full border px-3 py-2 text-xs font-semibold transition ${ui.buttonGhost}`}
+              >
+                Raw input
+              </button>
               <div className="flex gap-2">
                 <button
                   type="button"
@@ -710,23 +717,17 @@ export default function Page() {
               </div>
             </div>
 
-            <textarea
-              value={rawInput}
-              onChange={(event) => setRawInput(event.target.value)}
-              placeholder="Paste your Laravel log entries here..."
-              className={`mt-2 h-72 w-full rounded-2xl border px-3 py-3 font-mono text-[13px] leading-5 outline-none transition focus:ring-2 focus:ring-amber-300/20 ${ui.input}`}
-            />
           </div>
 
-          <div className={`rounded-[1.5rem] border p-4 shadow-2xl backdrop-blur transition-colors ${ui.mainCard}`}>
+          <div className={`rounded-[1.5rem] border p-4 shadow-2xl backdrop-blur transition-colors xl:col-span-2 ${ui.mainCard}`}>
             <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
               <div>
                 <h2 className={`font-[family-name:var(--font-display)] text-xl ${ui.title}`}>
                   Log explorer
                 </h2>
-                <p className={`mt-1 text-sm ${ui.muted}`}>
+                {/* <p className={`mt-1 text-sm ${ui.muted}`}>
                   The table is the primary workspace now: denser rows, wider message column, less dead space.
-                </p>
+                </p> */}
               </div>
 
               <div className="flex flex-wrap gap-2">
@@ -917,6 +918,49 @@ export default function Page() {
           </div>
         </section>
       </div>
+
+      {isRawInputOpen ? (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm"
+          role="presentation"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) {
+              setIsRawInputOpen(false);
+            }
+          }}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="raw-input-title"
+            className={`flex max-h-[90vh] w-full max-w-4xl flex-col rounded-[1.5rem] border p-4 shadow-2xl ${ui.mainCard}`}
+          >
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <h2 id="raw-input-title" className={`font-[family-name:var(--font-display)] text-xl ${ui.title}`}>
+                  Raw input
+                </h2>
+                <p className={`mt-1 text-sm ${ui.muted}`}>Edit the source log before parsing.</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsRawInputOpen(false)}
+                aria-label="Close raw input"
+                className={`rounded-full border px-3 py-2 text-sm font-semibold transition ${ui.buttonGhost}`}
+              >
+                Close
+              </button>
+            </div>
+            <textarea
+              autoFocus
+              value={rawInput}
+              onChange={(event) => setRawInput(event.target.value)}
+              placeholder="Paste your Laravel log entries here..."
+              className={`mt-4 min-h-72 w-full flex-1 resize-y rounded-2xl border px-3 py-3 font-mono text-[13px] leading-5 outline-none transition focus:ring-2 focus:ring-amber-300/20 ${ui.input}`}
+            />
+          </div>
+        </div>
+      ) : null}
     </main>
   );
 }
