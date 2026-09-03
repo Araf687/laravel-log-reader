@@ -33,6 +33,20 @@ function getLogDate(timestamp: string) {
   return match ? match[1] : "";
 }
 
+function formatLogTimestamp(timestamp: string) {
+  const match = timestamp.match(/^(\d{4}-\d{2}-\d{2})\s+(\d{2}):(\d{2}):(\d{2})(.*)$/);
+
+  if (!match) {
+    return timestamp;
+  }
+
+  const hour = Number(match[2]);
+  const period = hour >= 12 ? "PM" : "AM";
+  const displayHour = hour % 12 || 12;
+
+  return `${match[1]} ${displayHour}:${match[3]}:${match[4]} ${period}${match[5]}`;
+}
+
 function isJsonRecord(value: unknown): value is JsonRecord {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -806,7 +820,6 @@ export default function Page() {
                     <thead className={`sticky top-0 z-10 backdrop-blur ${ui.tableHead}`}>
                       <tr className={`border-b text-left text-[11px] uppercase tracking-[0.18em] ${ui.tableHead}`}>
                         <th className="w-[170px] px-3 py-3 font-semibold">Time</th>
-                        <th className="w-[110px] px-3 py-3 font-semibold">Env</th>
                         <th className="w-[110px] px-3 py-3 font-semibold">Level</th>
                         <th className="px-3 py-3 font-semibold">Message</th>
                       </tr>
@@ -818,9 +831,8 @@ export default function Page() {
                           className={`border-b align-top transition ${ui.tableRow}`}
                         >
                           <td className={`px-3 py-3 font-mono text-[12px] leading-5 ${ui.tableText}`}>
-                            {log.timestamp}
+                            {formatLogTimestamp(log.timestamp)}
                           </td>
-                          <td className={`px-3 py-3 text-sm ${ui.tableText}`}>{log.environment}</td>
                           <td className="px-3 py-3">
                             <span
                               className={`inline-flex rounded-full px-2.5 py-1 text-[11px] font-medium ${levelStyles[log.level]}`}
